@@ -56,6 +56,9 @@ public class RabbitMQWebSocketMessageSender extends AbstractWebSocketMessageSend
         RabbitMQWebSocketMessage mqMessage = new RabbitMQWebSocketMessage()
                 .setSessionId(sessionId).setUserId(userId).setUserType(userType)
                 .setMessageType(messageType).setMessageContent(messageContent);
+        // rabbitMQ生产者发送消息：生产者只需要关注Exchange交换机和routingKey即可，当routingKey为null时内部会转换为""
+        // 生产者如果和消费者不在同一个微服务中，则生产者服务必须定义Exchange和Queue，以及Binding；
+        // 生产者如果和消费者在同一个微服务中，则生产者可以只定义Exchange；至于Queue以及Binding则可以在消费端通过@RabbitListener注解进行启动时创建
         rabbitTemplate.convertAndSend(topicExchange.getName(), null, mqMessage);
     }
 
