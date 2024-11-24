@@ -19,11 +19,20 @@ import static cn.iocoder.yudao.framework.env.core.util.EnvUtils.HOST_NAME_VALUE;
  */
 public class EnvEnvironmentPostProcessor implements EnvironmentPostProcessor {
 
+    /**
+     * 初始化一堆标签，使用set集合收集，不允许重复
+     */
     private static final Set<String> TARGET_TAG_KEYS = SetUtils.asSet(
             "spring.cloud.nacos.discovery.metadata.tag" // Nacos 注册中心
             // MQ TODO
     );
 
+    /**
+     * 这个方法在spring容器启动前进行回调执行，此时Environment对象刚被创建完毕，ApplicationContext对象还没有进行实例化
+     *
+     * @param environment
+     * @param application
+     */
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
         // 0. 设置 ${HOST_NAME} 兜底的环境变量
